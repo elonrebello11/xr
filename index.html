@@ -50,25 +50,37 @@
             flex-direction: column;
         }
 
-        /* STAGE CURTAIN EFFECT */
+        /* STAGE CURTAINS WITH ROPE/TASSEL DECORATION */
         .curtain-left, .curtain-right {
             position: absolute;
             top: 0;
             width: 50%;
             height: 100%;
-            background: linear-gradient(90deg, #7f1d1d, #991b1b, #b91c1c);
+            background: linear-gradient(90deg, #581c87, #7e22ce, #9333ea);
             z-index: 100;
             transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
             pointer-events: none;
+            display: flex;
+            align-items: center;
         }
-        .curtain-left { left: 0; transform-origin: left; }
-        .curtain-right { right: 0; transform-origin: right; }
+        .curtain-left { left: 0; transform-origin: left; justify-content: flex-end; border-right: 4px solid #f59e0b; }
+        .curtain-right { right: 0; transform-origin: right; justify-content: flex-start; border-left: 4px solid #f59e0b; }
 
         .presentation-container.open .curtain-left { transform: translateX(-100%); }
         .presentation-container.open .curtain-right { transform: translateX(100%); }
 
-        /* SLIDES & SMOOTH CROSSFADE ANIMATIONS */
+        .curtain-label {
+            color: #f59e0b;
+            font-weight: bold;
+            font-size: 1.2rem;
+            writing-mode: vertical-rl;
+            padding: 20px 0;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* SLIDES & ADVANCED ANIMATIONS */
         .slide {
             position: absolute;
             top: 0;
@@ -81,8 +93,8 @@
             justify-content: space-between;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-            transform: scale(0.98) translateY(10px);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95) translateY(20px);
         }
 
         .slide.active {
@@ -92,14 +104,30 @@
             z-index: 10;
         }
 
+        /* STAGGERED ENTRANCE ANIMATIONS FOR CARDS */
+        .slide.active .card, 
+        .slide.active .stock-card, 
+        .slide.active .center-content {
+            animation: cardEntrance 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .slide.active .content-grid .card:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        @keyframes cardEntrance {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         @keyframes explodePop {
-            0% { transform: scale(0.8); opacity: 0; }
-            70% { transform: scale(1.04); opacity: 1; }
+            0% { transform: scale(0.7); opacity: 0; }
+            70% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         .slide.active .explode-anim {
-            animation: explodePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: explodePop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         /* HEADER & FOOTER */
@@ -109,6 +137,12 @@
             align-items: center;
             border-bottom: 2px solid var(--card-border);
             padding-bottom: 12px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .slide-header h2 {
@@ -159,7 +193,8 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
         }
 
         .stock-card {
@@ -170,6 +205,7 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             transition: transform 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
         }
 
         .stock-card h4 {
@@ -185,8 +221,9 @@
         }
 
         .card:hover, .stock-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px) scale(1.01);
             border-color: var(--accent-blue);
+            box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.2);
         }
 
         .card h3 {
@@ -208,6 +245,7 @@
             justify-content: center;
             text-align: center;
             flex: 1;
+            opacity: 0;
         }
 
         .center-content h1 {
@@ -233,12 +271,13 @@
             border-radius: 10px;
             border: 1px dashed var(--accent-green);
             display: inline-block;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, background 0.2s ease;
         }
 
         .stock-price-tag.flash {
-            transform: scale(1.05);
-            background: rgba(16, 185, 129, 0.25);
+            transform: scale(1.08);
+            background: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
         }
 
         /* NAVIGATION CONTROLS */
@@ -246,6 +285,13 @@
             display: flex;
             gap: 15px;
             margin-top: 15px;
+            align-items: center;
+        }
+
+        .hint-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-left: 10px;
         }
 
         button.nav-btn {
@@ -257,14 +303,14 @@
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
-        button.nav-btn:hover { background: #2563eb; transform: scale(1.05); }
+        button.nav-btn:hover { background: #2563eb; transform: scale(1.05); box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4); }
         button.nav-btn:active { transform: scale(0.95); }
         button.secondary-btn { background: #374151; }
-        button.secondary-btn:hover { background: #4b5563; }
+        button.secondary-btn:hover { background: #4b5563; box-shadow: 0 6px 12px rgba(75, 85, 99, 0.4); }
 
         .live-indicator {
             display: inline-block;
@@ -287,9 +333,9 @@
 <body>
 
     <div class="presentation-container open" id="presContainer">
-        <!-- Curtains -->
-        <div class="curtain-left" id="curtainLeft"></div>
-        <div class="curtain-right" id="curtainRight"></div>
+        <!-- Curtains with interactive visual toggles -->
+        <div class="curtain-left" id="curtainLeft"><span class="curtain-label">PRESS 'C'</span></div>
+        <div class="curtain-right" id="curtainRight"><span class="curtain-label">PRESS 'C'</span></div>
 
         <!-- SLIDE 1: Title -->
         <section class="slide active" aria-label="Slide 1">
@@ -546,9 +592,10 @@
 
     <!-- Navigation Controls -->
     <div class="nav-controls">
-        <button class="nav-btn secondary-btn" id="curtainBtn" type="button">Toggle Curtains</button>
-        <button class="nav-btn" id="prevBtn" type="button">Previous</button>
-        <button class="nav-btn" id="nextBtn" type="button">Next Slide</button>
+        <button class="nav-btn secondary-btn" id="curtainBtn" type="button">Toggle Curtains (C)</button>
+        <button class="nav-btn" id="prevBtn" type="button">&larr; Previous</button>
+        <button class="nav-btn" id="nextBtn" type="button">Next Slide &rarr;</button>
+        <span class="hint-text">Tip: Use Arrow Keys, Spacebar, or 'C' key</span>
     </div>
 
     <script>
@@ -595,7 +642,7 @@
             if (el.innerText !== newText) {
                 el.innerText = newText;
                 el.classList.add('flash');
-                setTimeout(() => el.classList.remove('flash'), 400);
+                setTimeout(() => el.classList.remove('flash'), 500);
             }
         }
 
@@ -615,7 +662,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 State.container.classList.add('open');
-            }, 500);
+            }, 600);
             fetchLiveStocks();
             setInterval(fetchLiveStocks, 4000);
         });
