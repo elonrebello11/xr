@@ -63,6 +63,25 @@
         .shake-steroids {
             animation: steroidsShake 0.35s ease-in-out;
         }
+        /* Custom print styling to ensure ONLY the receipt prints when requested */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #receipt-paper, #receipt-paper * {
+                visibility: visible;
+            }
+            #receipt-paper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                background: white;
+                color: black;
+            }
+        }
     </style>
 </head>
 <body class="h-full bg-atmDark text-white font-sans flex flex-col overflow-hidden select-none">
@@ -79,17 +98,14 @@
             </div>
         </div>
 
-        <!-- Background Music Dock -->
+        <!-- Background Music Dock (Using Reliable Synthesized Web Audio API Chime / Ambient Pad so it never breaks) -->
         <div class="flex items-center space-x-3 bg-black/40 px-4 py-1.5 rounded-xl border border-white/10">
             <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                <span id="now-playing-label" class="text-xs text-slate-300 font-mono">BGM: Hall of Fame (Inst)</span>
+                <span id="bgm-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                <span id="now-playing-label" class="text-xs text-slate-300 font-mono">BGM: Synth Chill Pad (Off)</span>
             </div>
             <button onclick="toggleBGM()" id="bgm-toggle-btn" class="px-3 py-1 bg-cyan-500 hover:bg-cyan-400 text-atmDark font-bold text-xs rounded-lg transition shadow">
                 <i class="fa-solid fa-play mr-1"></i> Play BGM
-            </button>
-            <button onclick="nextBGM()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg transition" title="Switch Track">
-                <i class="fa-solid fa-forward"></i>
             </button>
         </div>
 
@@ -110,14 +126,14 @@
             <div class="bg-black/40 py-2 border-b border-white/10 flex items-center justify-between px-6 shrink-0">
                 <div class="flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span class="text-[10px] text-slate-400 font-mono tracking-widest"><i class="fa-brands fa-bluetooth text-cyan-400 mr-1"></i> BT SPEAKER & POCKET PRINTER LINKED</span>
+                    <span class="text-[10px] text-slate-400 font-mono tracking-widest"><i class="fa-brands fa-bluetooth text-cyan-400 mr-1"></i> BT SPEAKER & THERMAL PRINTER LINKED</span>
                 </div>
                 <div class="flex space-x-1">
                     <div class="w-6 h-1 bg-slate-700 rounded-full"></div>
                     <div class="w-6 h-1 bg-slate-700 rounded-full"></div>
                     <div class="w-6 h-1 bg-slate-700 rounded-full"></div>
                 </div>
-                <div class="text-[10px] text-slate-400 font-mono">KIOSK STEROIDS V4.0</div>
+                <div class="text-[10px] text-slate-400 font-mono">KIOSK STEROIDS V4.1</div>
             </div>
 
             <!-- Scrollable Content Area -->
@@ -155,7 +171,7 @@
                         </div>
                         
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Smart ATM-Shaped Math Calculator</h2>
-                        <p class="text-slate-300 text-base sm:text-lg max-w-lg mb-8">Exhibition grade intelligent calculator featuring Bluetooth male voice narrator, pocket thermal printer support, and unified dial-pad math.</p>
+                        <p class="text-slate-300 text-base sm:text-lg max-w-lg mb-8">Exhibition-grade intelligent calculator featuring Bluetooth male voice narrator, instant thermal printer receipt slips, and unified dial-pad math.</p>
                         
                         <button onclick="startCardInsertion()" class="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-lg rounded-2xl shadow-2xl shadow-cyan-500/50 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 glow-steroids">
                             <i class="fa-solid fa-fingerprint text-xl"></i>
@@ -387,7 +403,7 @@
                 <button onclick="triggerPhysicalPrint()" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-atmDark font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center glow-steroids">
                     <i class="fa-solid fa-print mr-1.5"></i> print answer
                 </button>
-                <button onclick="clearReceipt()" class="px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 rounded-xl text-xs transition border border-white/10 flex items-center justify-center">
+                <button onclick="clearReceipt()" class="px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 rounded-xl text-xs transition border border-white/10 flex items-center justify-center" title="Clear Receipt">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             </div>
@@ -420,7 +436,7 @@
                     <h4 class="font-bold text-white text-base mb-1.5 flex items-center text-emerald-400">
                         <i class="fa-solid fa-print mr-2"></i> 2. Pocket Thermal Mini Printer
                     </h4>
-                    <p class="mb-2">Turn on your pocket thermal printer. When you click <span class="text-cyan-400 font-semibold">"print answer"</span>, select your thermal printer from the popup print dialog to print receipts instantly.</p>
+                    <p class="mb-2">Turn on your pocket thermal printer. When you click <span class="text-cyan-400 font-semibold">"print answer"</span>, it formats and triggers your browser print dialog configured for thermal paper slips.</p>
                 </div>
             </div>
 
@@ -432,35 +448,75 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // --- Background Instrumental Music Engine ---
-        const bgmTracks = [
-            { name: "Hall of Fame (Inst)", url: "https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" }, // Placeholder synthesized ambient loop for reliable offline exhibition
-            { name: "Something Just Like This (Inst)", url: "https://actions.google.com/sounds/v1/science/sci_fi_lab.ogg" }
-        ];
-        let currentTrackIdx = 0;
-        const bgmAudio = new Audio(bgmTracks[0].url);
-        bgmAudio.loop = true;
-        bgmAudio.volume = 0.3;
+        // --- Robust Web Audio API Chill Ambient Synth BGM (Guaranteed never broken by external CORS or URL failures) ---
+        let audioCtx = null;
         let isBgmPlaying = false;
+        let bgmInterval = null;
+
+        function startSynthBGM() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Play ambient chords in a relaxing loop
+            const chords = [
+                [220.00, 329.63, 440.00], // A minor
+                [174.61, 261.63, 349.23], // F major
+                [130.81, 196.00, 261.63], // C major
+                [164.81, 246.94, 329.63]  // E minor
+            ];
+            let chordIdx = 0;
+
+            function playChord() {
+                if (!isBgmPlaying) return;
+                const notes = chords[chordIdx % chords.length];
+                chordIdx++;
+
+                notes.forEach(freq => {
+                    if (!audioCtx) return;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + 1.0);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 3.8);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 4.0);
+                });
+            }
+
+            playChord();
+            bgmInterval = setInterval(playChord, 4000);
+        }
 
         function toggleBGM() {
             const btn = document.getElementById('bgm-toggle-btn');
-            if (isBgmPlaying) {
-                bgmAudio.pause();
-                isBgmPlaying = false;
-                btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Play BGM';
-            } else {
-                bgmAudio.play().catch(e => console.log("BGM autoplay restricted"));
-                isBgmPlaying = true;
-                btn.innerHTML = '<i class="fa-solid fa-pause mr-1"></i> Pause BGM';
-            }
-        }
+            const statusDot = document.getElementById('bgm-status-dot');
+            const label = document.getElementById('now-playing-label');
 
-        function nextBGM() {
-            currentTrackIdx = (currentTrackIdx + 1) % bgmTracks.length;
-            bgmAudio.src = bgmTracks[currentTrackIdx].url;
-            document.getElementById('now-playing-label').innerText = `BGM: ${bgmTracks[currentTrackIdx].name}`;
-            if (isBgmPlaying) bgmAudio.play();
+            if (isBgmPlaying) {
+                isBgmPlaying = false;
+                if (bgmInterval) clearInterval(bgmInterval);
+                btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Play BGM';
+                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-slate-500';
+                label.innerText = 'BGM: Synth Chill Pad (Off)';
+            } else {
+                isBgmPlaying = true;
+                startSynthBGM();
+                btn.innerHTML = '<i class="fa-solid fa-pause mr-1"></i> Pause BGM';
+                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping';
+                label.innerText = 'BGM: Synth Chill Pad (Playing)';
+            }
         }
 
         // --- Web Speech API (Reliable Male Narrator Voice for Bluetooth Speaker) ---
@@ -540,7 +596,6 @@
 
         function submitPin() {
             if (currentPin === correctPin) {
-                // EXACT REQUIREMENT: Says ONLY "Welcome killer"
                 speakNarrator("Welcome killer");
                 appendReceipt("ATM AUTHENTICATION", "PIN Verified.\nUser: killer logged in.");
                 showScreen('screen-kiosk');
@@ -618,12 +673,10 @@
 
                 document.getElementById('calc-main-result').innerText = result;
                 
-                // Steroids Animation on Calc Box
                 const box = document.getElementById('calc-display-box');
                 box.classList.add('border-emerald-400', 'scale-105', 'bg-emerald-950/40', 'shake-steroids');
                 setTimeout(() => box.classList.remove('border-emerald-400', 'scale-105', 'bg-emerald-950/40', 'shake-steroids'), 600);
 
-                // BLUETOOTH SPEAKER SAYS QUESTION AND ANSWER (e.g., "5 plus 4 is 9")
                 const spokenText = `${calcBuffer.replace(/\+/g, ' plus ').replace(/-/g, ' minus ').replace(/\*/g, ' times ').replace(/\//g, ' divided by ')} is ${result}`;
                 speakNarrator(spokenText);
 
@@ -696,7 +749,7 @@
             speakNarrator(`For equation ${a}x plus ${b} equals ${c}, x equals ${x.toFixed(2)}`);
         }
 
-        // --- Thermal Receipt & Print Management ---
+        // --- Thermal Receipt & Print Management (Strictly Prints ONLY the receipt slip) ---
         function appendReceipt(title, details) {
             const body = document.getElementById('receipt-body');
             if (body.querySelector('.italic')) {
