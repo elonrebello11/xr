@@ -399,16 +399,57 @@
             </div>
 
             <!-- Printer Action Controls (Says ONLY "print answer" as requested) -->
-            <div class="p-4 border-t border-white/10 bg-atmDark flex space-x-2">
-                <button onclick="triggerPhysicalPrint()" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-atmDark font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center glow-steroids">
-                    <i class="fa-solid fa-print mr-1.5"></i> print answer
-                </button>
-                <button onclick="clearReceipt()" class="px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 rounded-xl text-xs transition border border-white/10 flex items-center justify-center" title="Clear Receipt">
-                    <i class="fa-solid fa-trash-can"></i>
+            <div class="p-4 border-t border-white/10 bg-atmDark flex flex-col space-y-2">
+                <div class="flex space-x-2">
+                    <button onclick="triggerPhysicalPrint()" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-atmDark font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center glow-steroids">
+                        <i class="fa-solid fa-print mr-1.5"></i> print answer
+                    </button>
+                    <button onclick="clearReceipt()" class="px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 rounded-xl text-xs transition border border-white/10 flex items-center justify-center" title="Clear Receipt">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+                <!-- Easy Print App Bridge Button -->
+                <button onclick="openEasyPrintModal()" class="w-full py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold text-xs rounded-xl border border-emerald-500/40 transition flex items-center justify-center">
+                    <i class="fa-solid fa-mobile-screen-button mr-2"></i> Export to "Easy Print" App
                 </button>
             </div>
         </aside>
     </main>
+
+    <!-- MODAL: Easy Print App Bridge -->
+    <div id="modal-easyprint" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-atmDark border border-emerald-500/40 rounded-3xl p-6 max-w-lg w-full shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">"Easy Print" App Bridge</h3>
+                        <p class="text-xs text-emerald-400 font-mono">Format for Bluetooth Thermal Printers</p>
+                    </div>
+                </div>
+                <button onclick="closeEasyPrintModal()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 py-4 overflow-y-auto space-y-4">
+                <p class="text-xs text-slate-300">Copy the formatted plain-text slip below and paste it directly into your <strong>Easy Print</strong> or POS thermal printer companion app via Bluetooth:</p>
+                
+                <div class="relative">
+                    <textarea id="easyprint-text-area" readonly class="w-full h-48 bg-black/60 border border-white/20 rounded-xl p-3 font-mono text-xs text-emerald-300 focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/10 flex space-x-3">
+                <button onclick="copyEasyPrintText()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-atmDark font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center">
+                    <i class="fa-solid fa-copy mr-2"></i> Copy Slip for Easy Print
+                </button>
+                <button onclick="closeEasyPrintModal()" class="px-6 py-3 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-xl text-xs transition">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL: Hardware Setup Guide -->
     <div id="modal-hardware" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -688,6 +729,12 @@
                 ` + log.innerHTML;
 
                 appendReceipt("DIAL PAD CALC", `${calcBuffer} = ${result}`);
+                
+                // AUTO PRINT: Automatically trigger thermal slip printing upon successful calculation
+                setTimeout(() => {
+                    window.print();
+                }, 400);
+
             } catch (err) {
                 speakNarrator("Calculation error.");
                 document.getElementById('calc-main-result').innerText = "Error";
@@ -720,6 +767,11 @@
             appendReceipt("HCF & LCM", `Numbers: ${nums.join(', ')}\nHCF: ${curHcf} | LCM: ${curLcm}`);
             
             speakNarrator(`The HCF is ${curHcf} and LCM is ${curLcm}`);
+
+            // AUTO PRINT
+            setTimeout(() => {
+                window.print();
+            }, 400);
         }
 
         // --- Algebra Solver Presets & Logic ---
@@ -747,9 +799,16 @@
             appendReceipt("ALGEBRA", `Eq: ${a}x + ${b} = ${c}\nx = ${x.toFixed(2)}`);
             
             speakNarrator(`For equation ${a}x plus ${b} equals ${c}, x equals ${x.toFixed(2)}`);
+
+            // AUTO PRINT
+            setTimeout(() => {
+                window.print();
+            }, 400);
         }
 
         // --- Thermal Receipt & Print Management (Strictly Prints ONLY the receipt slip) ---
+        let latestReceiptText = "ATM MATH KIOSK\nUser: killer\nNo calculations yet.";
+
         function appendReceipt(title, details) {
             const body = document.getElementById('receipt-body');
             if (body.querySelector('.italic')) {
@@ -766,14 +825,40 @@
             `;
             body.prepend(item);
             document.getElementById('receipt-timestamp').innerText = now.toLocaleDateString() + ' - ' + timeStr;
+
+            // Update plain text buffer for Easy Print app integration
+            latestReceiptText = `==============================\n       ATM MATH KIOSK       \n==============================\nUser: killer\nTime: ${now.toLocaleDateString()} ${timeStr}\n------------------------------\n[${title}]\n${details}\n------------------------------\n   EXHIBITION EDITION PROOF   \n==============================`;
         }
 
         function clearReceipt() {
             document.getElementById('receipt-body').innerHTML = '<div class="text-slate-500 italic text-center py-6">Receipt cleared. Ready for next exhibition calculation.</div>';
+            latestReceiptText = "ATM MATH KIOSK\nUser: killer\nReceipt Cleared.";
         }
 
         function triggerPhysicalPrint() {
             window.print();
+        }
+
+        // Easy Print App Bridge Functions
+        function openEasyPrintModal() {
+            document.getElementById('easyprint-text-area').value = latestReceiptText;
+            document.getElementById('modal-easyprint').classList.remove('hidden');
+        }
+
+        function closeEasyPrintModal() {
+            document.getElementById('modal-easyprint').classList.add('hidden');
+        }
+
+        function copyEasyPrintText() {
+            const textarea = document.getElementById('easyprint-text-area');
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                speakNarrator("Receipt copied for Easy Print app");
+                alert("Receipt slip copied to clipboard! Open your Easy Print app and paste it.");
+            } catch (err) {
+                alert("Failed to copy automatically. Please select text manually.");
+            }
         }
 
         function toggleHardwareModal(show) {
