@@ -47,41 +47,6 @@
         .glow-steroids {
             animation: pulseGlowSteroids 0.9s infinite ease-in-out;
         }
-        @keyframes steroidsEntrance {
-            0% { opacity: 0; transform: scale(0.5) translateY(80px) rotateX(25deg); filter: blur(12px); }
-            60% { transform: scale(1.05) translateY(-15px) rotateX(0deg); filter: blur(0px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .entrance-steroids {
-            animation: steroidsEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes steroidsShake {
-            0%, 100% { transform: translateX(0) scale(1); }
-            20%, 60% { transform: translateX(-10px) scale(1.04) rotate(-1deg); }
-            40%, 80% { transform: translateX(10px) scale(1.04) rotate(1deg); }
-        }
-        .shake-steroids {
-            animation: steroidsShake 0.35s ease-in-out;
-        }
-        /* Custom print styling to ensure ONLY the receipt prints when requested */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #receipt-paper, #receipt-paper * {
-                visibility: visible;
-            }
-            #receipt-paper {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                box-shadow: none;
-                background: white;
-                color: black;
-            }
-        }
     </style>
 </head>
 <body class="h-full bg-atmDark text-white font-sans flex flex-col overflow-hidden select-none">
@@ -89,16 +54,16 @@
     <!-- Top Hardware Status Bar -->
     <header class="bg-atmCard border-b border-white/10 px-6 py-3 flex items-center justify-between shadow-lg shrink-0">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/30 glow-steroids">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/30">
                 <i class="fa-solid fa-calculator text-white text-lg"></i>
             </div>
             <div>
                 <h1 class="font-bold text-lg text-white tracking-wide">ATM-SHAPED MATH CALCULATOR</h1>
-                <p class="text-xs text-cyan-400 font-medium">School Exhibition Edition • Bluetooth & Thermal Printer Ready</p>
+                <p class="text-xs text-cyan-400 font-medium">School Exhibition Edition • Optimized & Lag-Free</p>
             </div>
         </div>
 
-        <!-- Background Music Dock (Using Reliable Synthesized Web Audio API Chime / Ambient Pad so it never breaks) -->
+        <!-- Background Music Dock -->
         <div class="flex items-center space-x-3 bg-black/40 px-4 py-1.5 rounded-xl border border-white/10">
             <div class="flex items-center space-x-2">
                 <span id="bgm-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
@@ -108,15 +73,9 @@
                 <i class="fa-solid fa-play mr-1"></i> Play BGM
             </button>
         </div>
-
-        <div class="flex items-center space-x-3">
-            <button onclick="toggleHardwareModal(true)" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 px-4 py-2 rounded-xl font-medium text-sm transition border border-cyan-500/30 flex items-center shadow-md">
-                <i class="fa-solid fa-screwdriver-wrench mr-2"></i> Hardware Setup
-            </button>
-        </div>
     </header>
 
-    <!-- Main Tablet Viewport Container (ATM Exterior Casing Look) -->
+    <!-- Main Tablet Viewport Container -->
     <main class="flex-1 flex overflow-hidden relative bg-gradient-to-b from-atmDark via-[#0f1c3f] to-atmDark p-2 sm:p-4">
         
         <!-- Center Kiosk Screen -->
@@ -126,23 +85,23 @@
             <div class="bg-black/40 py-2 border-b border-white/10 flex items-center justify-between px-6 shrink-0">
                 <div class="flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span class="text-[10px] text-slate-400 font-mono tracking-widest"><i class="fa-brands fa-bluetooth text-cyan-400 mr-1"></i> BT SPEAKER & THERMAL PRINTER LINKED</span>
+                    <span class="text-[10px] text-slate-400 font-mono tracking-widest"><i class="fa-brands fa-bluetooth text-cyan-400 mr-1"></i> AUDIO BLUETOOTH SPEAKER READY</span>
                 </div>
                 <div class="flex space-x-1">
                     <div class="w-6 h-1 bg-slate-700 rounded-full"></div>
                     <div class="w-6 h-1 bg-slate-700 rounded-full"></div>
                     <div class="w-6 h-1 bg-slate-700 rounded-full"></div>
                 </div>
-                <div class="text-[10px] text-slate-400 font-mono">KIOSK STEROIDS V4.1</div>
+                <div class="text-[10px] text-slate-400 font-mono">OPTIMIZED STEROIDS V5.0</div>
             </div>
 
             <!-- Scrollable Content Area -->
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center relative">
                 
-                <!-- SIDE TOGGLE SWITCHES PANEL (Floating inside screen) -->
-                <div id="side-toggles" class="hidden absolute left-4 top-6 z-20 flex flex-col space-y-3 bg-black/60 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-2xl entrance-steroids">
+                <!-- SIDE TOGGLE SWITCHES PANEL -->
+                <div id="side-toggles" class="hidden absolute left-4 top-6 z-20 flex flex-col space-y-3 bg-black/60 backdrop-blur-md p-3 rounded-2xl border border-white/10 shadow-2xl">
                     <span class="text-[10px] font-mono text-cyan-400 text-center font-bold uppercase tracking-wider">Mode</span>
-                    <button onclick="switchMode('dialpad')" id="btn-mode-dialpad" class="w-12 h-12 rounded-xl bg-cyan-500 text-atmDark font-bold text-xs flex flex-col items-center justify-center shadow-lg transition transform hover:scale-110 active:scale-90 glow-steroids" title="Unified Dial Pad">
+                    <button onclick="switchMode('dialpad')" id="btn-mode-dialpad" class="w-12 h-12 rounded-xl bg-cyan-500 text-atmDark font-bold text-xs flex flex-col items-center justify-center shadow-lg transition transform hover:scale-110 active:scale-90" title="Unified Dial Pad">
                         <i class="fa-solid fa-calculator text-base"></i>
                     </button>
                     <button onclick="switchMode('hcflcm')" id="btn-mode-hcflcm" class="w-12 h-12 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex flex-col items-center justify-center transition transform hover:scale-110 active:scale-90" title="HCF & LCM">
@@ -156,32 +115,32 @@
                 <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col justify-center">
 
                     <!-- SCREEN 1: ATM WELCOME & CARD INSERTION -->
-                    <div id="screen-welcome" class="screen-view flex flex-col items-center justify-center text-center p-8 bg-atmDark/95 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden entrance-steroids">
-                        <div class="absolute -top-24 -right-24 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
-                        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-gold/15 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+                    <div id="screen-welcome" class="screen-view flex flex-col items-center justify-center text-center p-8 bg-atmDark/95 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
+                        <div class="absolute -top-24 -right-24 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-gold/15 rounded-full blur-3xl pointer-events-none"></div>
                         
                         <!-- Simulated ATM Card Slot Graphic -->
-                        <div class="w-36 h-12 bg-black/70 border-2 border-dashed border-cyan-400/80 rounded-xl flex items-center justify-center mb-6 shadow-inner relative group cursor-pointer hover:border-cyan-400 transition transform hover:scale-105 glow-steroids" onclick="startCardInsertion()">
+                        <div class="w-36 h-12 bg-black/70 border-2 border-dashed border-cyan-400/80 rounded-xl flex items-center justify-center mb-6 shadow-inner relative group cursor-pointer hover:border-cyan-400 transition transform hover:scale-105" onclick="startCardInsertion()">
                             <div class="w-24 h-2.5 bg-cyan-400/70 rounded animate-ping"></div>
                             <span class="absolute text-[11px] text-cyan-300 font-mono font-bold uppercase tracking-wider bg-atmDark px-3 py-0.5 rounded border border-cyan-500/30">Insert ID / Tap Here</span>
                         </div>
 
-                        <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700 flex items-center justify-center text-4xl shadow-2xl shadow-cyan-500/40 mb-6 glow-steroids">
+                        <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700 flex items-center justify-center text-4xl shadow-2xl shadow-cyan-500/40 mb-6">
                             <i class="fa-solid fa-calculator text-white"></i>
                         </div>
                         
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Smart ATM-Shaped Math Calculator</h2>
-                        <p class="text-slate-300 text-base sm:text-lg max-w-lg mb-8">Exhibition-grade intelligent calculator featuring Bluetooth male voice narrator, instant thermal printer receipt slips, and unified dial-pad math.</p>
+                        <p class="text-slate-300 text-base sm:text-lg max-w-lg mb-8">Exhibition-grade intelligent calculator featuring optimized performance, male voice narration, and 15 algebra equations.</p>
                         
-                        <button onclick="startCardInsertion()" class="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-lg rounded-2xl shadow-2xl shadow-cyan-500/50 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-3 glow-steroids">
+                        <button onclick="startCardInsertion()" class="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-lg rounded-2xl shadow-2xl shadow-cyan-500/50 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-3">
                             <i class="fa-solid fa-fingerprint text-xl"></i>
                             <span>Tap to Start ATM Session</span>
                         </button>
                     </div>
 
                     <!-- SCREEN 2: ATM PIN ENTRY KEYPAD -->
-                    <div id="screen-pin" class="screen-view hidden flex flex-col items-center justify-center p-6 bg-atmDark/95 rounded-3xl border border-white/10 shadow-2xl max-w-md mx-auto w-full entrance-steroids">
-                        <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-2xl mb-4 glow-steroids">
+                    <div id="screen-pin" class="screen-view hidden flex flex-col items-center justify-center p-6 bg-atmDark/95 rounded-3xl border border-white/10 shadow-2xl max-w-md mx-auto w-full">
+                        <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-2xl mb-4">
                             <i class="fa-solid fa-lock"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-2">Enter ATM Security PIN</h3>
@@ -217,17 +176,17 @@
                     </div>
 
                     <!-- SCREEN 3: UNIFIED MATH KIOSK INTERFACE -->
-                    <div id="screen-kiosk" class="screen-view hidden flex flex-col space-y-6 sm:pl-16 entrance-steroids">
+                    <div id="screen-kiosk" class="screen-view hidden flex flex-col space-y-6 sm:pl-16">
                         
                         <!-- Top Session Status Header -->
                         <div class="bg-atmDark/90 border border-white/10 rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg glow-steroids">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
                                     <i class="fa-solid fa-calculator"></i>
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-bold text-white">Welcome <span class="text-cyan-400 font-mono">killer</span></h3>
-                                    <p class="text-xs text-slate-300">ATM Math Kiosk • Active Bluetooth Speaker & Pocket Printer Link</p>
+                                    <p class="text-xs text-slate-300">ATM Math Kiosk • Fully Optimized</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2">
@@ -244,22 +203,22 @@
                             <!-- LEFT/CENTER: DYNAMIC INPUT & DIAL-PAD CALCULATOR -->
                             <div class="lg:col-span-7 flex flex-col space-y-4">
                                 
-                                <!-- Mode 1: Unified Dial-Pad Calculator (BODMAS + Addition) -->
+                                <!-- Mode 1: Unified Dial-Pad Calculator -->
                                 <div id="panel-dialpad" class="math-panel bg-atmDark/90 border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4">
                                     <div class="flex items-center justify-between">
                                         <h4 class="font-bold text-white text-sm flex items-center">
-                                            <i class="fa-solid fa-calculator text-cyan-400 mr-2"></i> Smart Dial Pad Calculator (BODMAS Supported)
+                                            <i class="fa-solid fa-calculator text-cyan-400 mr-2"></i> Smart Dial Pad Calculator (BODMAS)
                                         </h4>
-                                        <span class="text-[10px] text-slate-400 font-mono">Supports +, -, *, /, ^, ()</span>
+                                        <span class="text-[10px] text-slate-400 font-mono">Instant Calculation</span>
                                     </div>
 
                                     <!-- Calc Display Screen -->
-                                    <div id="calc-display-box" class="bg-black/60 border-2 border-cyan-500/60 rounded-2xl p-4 flex flex-col justify-end min-h-[100px] text-right shadow-inner transition-all duration-300 glow-steroids">
+                                    <div id="calc-display-box" class="bg-black/60 border-2 border-cyan-500/60 rounded-2xl p-4 flex flex-col justify-end min-h-[100px] text-right shadow-inner transition-all duration-300">
                                         <div id="calc-expr-preview" class="text-slate-400 text-sm font-mono min-h-[20px]">5 + 4</div>
                                         <div id="calc-main-result" class="text-3xl sm:text-4xl font-extrabold text-cyan-300 font-mono tracking-tight mt-1">9</div>
                                     </div>
 
-                                    <!-- Dial Pad Grid (Includes explicit Addition + button) -->
+                                    <!-- Dial Pad Grid -->
                                     <div class="grid grid-cols-4 gap-2.5">
                                         <button onclick="calcInput('(')" class="h-14 rounded-xl bg-white/5 hover:bg-white/10 active:bg-cyan-500/30 text-cyan-400 font-bold text-lg border border-white/10 transition transform active:scale-95">(</button>
                                         <button onclick="calcInput(')')" class="h-14 rounded-xl bg-white/5 hover:bg-white/10 active:bg-cyan-500/30 text-cyan-400 font-bold text-lg border border-white/10 transition transform active:scale-95">)</button>
@@ -284,7 +243,7 @@
                                         <button onclick="calcInput('0')" class="h-14 rounded-xl bg-white/5 hover:bg-white/10 active:bg-cyan-500/30 text-white font-bold text-xl border border-white/10 transition transform active:scale-95">0</button>
                                         <button onclick="calcInput('.')" class="h-14 rounded-xl bg-white/5 hover:bg-white/10 active:bg-cyan-500/30 text-white font-bold text-xl border border-white/10 transition transform active:scale-95">.</button>
                                         <button onclick="calcInput(' + ')" class="h-14 rounded-xl bg-cyan-500/40 hover:bg-cyan-500/50 active:bg-cyan-500/60 text-cyan-100 font-extrabold text-2xl border border-cyan-400 transition transform active:scale-95 shadow-lg shadow-cyan-500/30">+</button>
-                                        <button onclick="calcEvaluate()" class="h-14 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 active:scale-95 text-white font-bold text-xl shadow-2xl shadow-emerald-500/40 transition glow-steroids">=</button>
+                                        <button onclick="calcEvaluate()" class="h-14 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 active:scale-95 text-white font-bold text-xl shadow-2xl shadow-emerald-500/40 transition">=</button>
                                     </div>
                                 </div>
 
@@ -299,19 +258,17 @@
                                     </div>
                                 </div>
 
-                                <!-- Mode 3: Algebra Solver Panel with Selectable Sums -->
+                                <!-- Mode 3: Algebra Solver Panel with 15 Pre-Made Equations -->
                                 <div id="panel-algebra" class="math-panel hidden bg-atmDark/90 border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4">
                                     <h4 class="font-bold text-white text-sm flex items-center">
-                                        <i class="fa-solid fa-atom text-emerald-400 mr-2"></i> Linear Equation Solver (ax + b = c)
+                                        <i class="fa-solid fa-atom text-emerald-400 mr-2"></i> 15 Pre-Made Algebra Equations (ax + b = c)
                                     </h4>
                                     
-                                    <!-- Preset Selectable Algebraic Sums -->
+                                    <!-- Scrollable 15 Algebra Presets Grid -->
                                     <div>
-                                        <label class="block text-[11px] font-semibold text-cyan-400 mb-1.5 uppercase tracking-wider">Choose Exhibition Sum Preset:</label>
-                                        <div class="grid grid-cols-3 gap-2">
-                                            <button onclick="setAlgebraPreset(3, 5, 20)" class="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-mono text-white transition">3x + 5 = 20</button>
-                                            <button onclick="setAlgebraPreset(4, -8, 16)" class="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-mono text-white transition">4x - 8 = 16</button>
-                                            <button onclick="setAlgebraPreset(5, 10, 35)" class="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-mono text-white transition">5x + 10 = 35</button>
+                                        <label class="block text-[11px] font-semibold text-cyan-400 mb-1.5 uppercase tracking-wider">Select Equation from 15 Presets:</label>
+                                        <div id="algebra-preset-list" class="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto pr-1">
+                                            <!-- Injected dynamically via JS -->
                                         </div>
                                     </div>
 
@@ -329,27 +286,27 @@
                                             <input type="number" id="alg-c" value="20" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-white font-mono text-center focus:border-emerald-400 focus:outline-none text-sm">
                                         </div>
                                     </div>
-                                    <button onclick="solveAlgebra()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-atmDark font-bold rounded-xl text-sm transition shadow-lg glow-steroids">Solve Equation</button>
+                                    <button onclick="solveAlgebra()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-atmDark font-bold rounded-xl text-sm transition shadow-lg">Solve Equation</button>
                                 </div>
                             </div>
 
-                            <!-- RIGHT: DYNAMIC CALCULATION PROOF & ANIMATED SPEAKER ANNOUNCEMENT PANEL -->
+                            <!-- RIGHT: VOICE & PROOF LOG -->
                             <div class="lg:col-span-5 flex flex-col bg-atmDark/90 border border-white/10 rounded-3xl p-6 shadow-2xl">
                                 <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                                     <h4 class="font-bold text-white text-sm flex items-center">
-                                        <i class="fa-solid fa-volume-high text-cyan-400 mr-2 animate-bounce"></i> Bluetooth Speaker (Male Voice)
+                                        <i class="fa-solid fa-volume-high text-cyan-400 mr-2"></i> Bluetooth Speaker (Male Voice)
                                     </h4>
                                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                                 </div>
 
-                                <div id="speech-visualizer" class="bg-black/50 border border-cyan-500/40 rounded-2xl p-4 mb-4 text-center glow-steroids">
+                                <div id="speech-visualizer" class="bg-black/50 border border-cyan-500/40 rounded-2xl p-4 mb-4 text-center">
                                     <div class="text-xs text-cyan-400 font-mono mb-1"><i class="fa-brands fa-bluetooth text-cyan-400 mr-1"></i> Male Voice Output Active</div>
-                                    <div id="spoken-text-display" class="text-white font-bold text-sm min-h-[40px] flex items-center justify-center">"Ready for math calculation..."</div>
+                                    <div id="spoken-text-display" class="text-white font-bold text-sm min-h-[40px] flex items-center justify-center">"Ready for calculation..."</div>
                                 </div>
 
-                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Step Breakdown & Verification</h5>
+                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Calculation Log</h5>
                                 <div id="kiosk-output-log" class="flex-1 bg-black/40 border border-white/10 rounded-2xl p-4 font-mono text-xs text-slate-200 overflow-y-auto space-y-3 min-h-[180px] max-h-[220px]">
-                                    <div class="text-slate-500 italic text-center py-8">Perform a calculation on the dial-pad or solvers to see proofs and hear the speaker.</div>
+                                    <div class="text-slate-500 italic text-center py-8">Perform a calculation to see history.</div>
                                 </div>
                             </div>
                         </div>
@@ -358,156 +315,96 @@
                 </div>
             </div>
 
-            <!-- ATM Slot / Receipt Chute Simulation at Bottom of Kiosk Screen -->
             <div class="bg-black/60 border-t border-white/10 px-6 py-2 flex items-center justify-between text-xs text-slate-400 shrink-0">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-receipt text-cyan-400"></i>
-                    <span>Pocket Thermal Printer Chute (Bluetooth Ready)</span>
+                    <i class="fa-solid fa-bolt text-cyan-400"></i>
+                    <span>Optimized Zero-Lag Math Engine</span>
                 </div>
-                <span class="font-mono text-[10px] text-emerald-400">READY TO PRINT PROOFS</span>
+                <span class="font-mono text-[10px] text-emerald-400">READY</span>
             </div>
         </div>
 
-        <!-- Right Side: Pocket Thermal Printer & Receipt Stream Panel -->
+        <!-- Right Side: Clean Full-Screen Answer Display Panel -->
         <aside class="w-80 lg:w-96 bg-black/80 border-l border-white/10 flex flex-col shrink-0">
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-atmDark">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-receipt text-cyan-400"></i>
-                    <h3 class="font-bold text-sm text-white">Thermal Receipt Stream</h3>
+                    <i class="fa-solid fa-square-poll-vertical text-cyan-400"></i>
+                    <h3 class="font-bold text-sm text-white">Live Answer Display</h3>
                 </div>
-                <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded uppercase tracking-wider">Live</span>
+                <span class="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold rounded uppercase tracking-wider">Active</span>
             </div>
 
-            <!-- Receipt Scrollable Paper Area -->
-            <div class="flex-1 p-4 overflow-y-auto flex flex-col items-center">
-                <div id="receipt-paper" class="w-full max-w-[280px] bg-receiptBg text-slate-800 rounded-sm p-4 font-mono text-xs shadow-2xl relative border-t-4 border-dashed border-slate-300">
-                    <div class="text-center pb-3 border-b border-dashed border-slate-300 mb-3">
-                        <h4 class="font-extrabold text-sm tracking-widest text-black">ATM MATH KIOSK</h4>
-                        <p class="text-[10px] text-slate-600">User: killer</p>
-                        <p class="text-[10px] text-slate-500" id="receipt-timestamp">26/10/2026 - 15:02</p>
-                    </div>
-
-                    <div id="receipt-body" class="space-y-2 text-[11px] leading-relaxed">
-                        <div class="text-center text-slate-500 italic py-6">No receipts generated yet.<br>Solve a math problem to print!</div>
-                    </div>
-
-                    <div class="mt-6 pt-3 border-t border-dashed border-slate-300 text-center text-[10px] text-slate-500">
-                        <p>*** EXHIBITION EDITION ***</p>
-                        <p>Pocket Printer & BT Speaker Linked</p>
-                    </div>
+            <!-- Answer Card Area -->
+            <div class="flex-1 p-6 overflow-y-auto flex flex-col items-center justify-center">
+                <div class="w-full bg-gradient-to-br from-slate-900 to-atmCard text-white rounded-2xl p-6 text-center shadow-2xl border border-cyan-500/30 relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-cyan-500 text-atmDark font-bold text-[10px] px-3 py-0.5 rounded-full uppercase tracking-wider">Latest Result</div>
+                    <div id="live-answer-box" class="text-4xl sm:text-5xl font-extrabold text-cyan-300 font-mono tracking-tight my-4">9</div>
+                    <div id="live-answer-meta" class="text-xs text-slate-400 font-mono">5 + 4</div>
                 </div>
             </div>
 
-            <!-- Printer Action Controls (Says ONLY "print answer" as requested) -->
-            <div class="p-4 border-t border-white/10 bg-atmDark flex flex-col space-y-2">
-                <div class="flex space-x-2">
-                    <button onclick="triggerPhysicalPrint()" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-atmDark font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center glow-steroids">
-                        <i class="fa-solid fa-print mr-1.5"></i> print answer
-                    </button>
-                    <button onclick="clearReceipt()" class="px-4 py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 rounded-xl text-xs transition border border-white/10 flex items-center justify-center" title="Clear Receipt">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
-                <!-- Easy Print App Bridge Button -->
-                <button onclick="openEasyPrintModal()" class="w-full py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold text-xs rounded-xl border border-emerald-500/40 transition flex items-center justify-center">
-                    <i class="fa-solid fa-mobile-screen-button mr-2"></i> Export to "Easy Print" App
+            <!-- Clear Action Controls -->
+            <div class="p-4 border-t border-white/10 bg-atmDark flex space-x-2">
+                <button onclick="clearAnswerBox()" class="w-full py-3 bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 rounded-xl text-xs transition border border-white/10 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-trash-can mr-2"></i> Clear Screen
                 </button>
             </div>
         </aside>
     </main>
 
-    <!-- MODAL: Easy Print App Bridge -->
-    <div id="modal-easyprint" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-atmDark border border-emerald-500/40 rounded-3xl p-6 max-w-lg w-full shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="flex items-center justify-between pb-4 border-b border-white/10">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-white">"Easy Print" App Bridge</h3>
-                        <p class="text-xs text-emerald-400 font-mono">Format for Bluetooth Thermal Printers</p>
-                    </div>
-                </div>
-                <button onclick="closeEasyPrintModal()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="flex-1 py-4 overflow-y-auto space-y-4">
-                <p class="text-xs text-slate-300">Copy the formatted plain-text slip below and paste it directly into your <strong>Easy Print</strong> or POS thermal printer companion app via Bluetooth:</p>
-                
-                <div class="relative">
-                    <textarea id="easyprint-text-area" readonly class="w-full h-48 bg-black/60 border border-white/20 rounded-xl p-3 font-mono text-xs text-emerald-300 focus:outline-none resize-none"></textarea>
-                </div>
-            </div>
-
-            <div class="pt-4 border-t border-white/10 flex space-x-3">
-                <button onclick="copyEasyPrintText()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-atmDark font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center">
-                    <i class="fa-solid fa-copy mr-2"></i> Copy Slip for Easy Print
-                </button>
-                <button onclick="closeEasyPrintModal()" class="px-6 py-3 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-xl text-xs transition">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Hardware Setup Guide -->
-    <div id="modal-hardware" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-atmDark border border-white/10 rounded-3xl p-6 max-w-2xl w-full shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="flex items-center justify-between pb-4 border-b border-white/10">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white">External Bluetooth Speaker & Pocket Printer Setup</h3>
-                </div>
-                <button onclick="toggleHardwareModal(false)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="flex-1 py-4 overflow-y-auto space-y-6 text-sm text-slate-300">
-                <div>
-                    <h4 class="font-bold text-white text-base mb-1.5 flex items-center text-cyan-400">
-                        <i class="fa-brands fa-bluetooth-b mr-2"></i> 1. External Bluetooth Speaker (Male Voice)
-                    </h4>
-                    <p class="mb-2">Pair your tablet or PC with your wireless Bluetooth speaker in your device Bluetooth settings. All male narrator speech output (announcing questions and answers) plays automatically through the Bluetooth speaker.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white text-base mb-1.5 flex items-center text-emerald-400">
-                        <i class="fa-solid fa-print mr-2"></i> 2. Pocket Thermal Mini Printer
-                    </h4>
-                    <p class="mb-2">Turn on your pocket thermal printer. When you click <span class="text-cyan-400 font-semibold">"print answer"</span>, it formats and triggers your browser print dialog configured for thermal paper slips.</p>
-                </div>
-            </div>
-
-            <div class="pt-4 border-t border-white/10 flex justify-end">
-                <button onclick="toggleHardwareModal(false)" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-atmDark font-bold rounded-xl text-sm transition">Got It!</button>
-            </div>
-        </div>
-    </div>
-
     <!-- JavaScript Application Logic -->
     <script>
-        // --- Robust Web Audio API Chill Ambient Synth BGM (Guaranteed never broken by external CORS or URL failures) ---
+        // --- Web Audio API Chill Ambient Synth BGM ---
         let audioCtx = null;
         let isBgmPlaying = false;
         let bgmInterval = null;
 
-        function startSynthBGM() {
+        function initAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
+        }
 
-            // Play ambient chords in a relaxing loop
+        // --- Log-in Sound Effect (Authentic ATM Chime / Success Tone) ---
+        function playLoginSound() {
+            try {
+                initAudioContext();
+                if (!audioCtx) return;
+
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+
+                gain.gain.setValueAtTime(0.01, now);
+                gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.8);
+            } catch (e) {
+                console.error("Audio playback error", e);
+            }
+        }
+
+        function startSynthBGM() {
+            initAudioContext();
             const chords = [
-                [220.00, 329.63, 440.00], // A minor
-                [174.61, 261.63, 349.23], // F major
-                [130.81, 196.00, 261.63], // C major
-                [164.81, 246.94, 329.63]  // E minor
+                [220.00, 329.63, 440.00],
+                [174.61, 261.63, 349.23],
+                [130.81, 196.00, 261.63],
+                [164.81, 246.94, 329.63]
             ];
             let chordIdx = 0;
 
@@ -525,7 +422,7 @@
                     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
                     gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + 1.0);
+                    gain.gain.exponentialRampToValueAtTime(0.03, audioCtx.currentTime + 1.0);
                     gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 3.8);
 
                     osc.connect(gain);
@@ -560,17 +457,17 @@
             }
         }
 
-        // --- Web Speech API (Reliable Male Narrator Voice for Bluetooth Speaker) ---
+        // --- Web Speech API Male Narrator ---
         function speakNarrator(textToSpeak) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
                 utterance.rate = 1.0;
-                utterance.pitch = 0.8; // Lower pitch for male voice narrator
+                utterance.pitch = 0.8;
                 utterance.volume = 1.0;
 
                 const voices = window.speechSynthesis.getVoices();
-                const maleVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mark') || v.name.toLowerCase().includes('george')) || voices[0];
+                const maleVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mark')) || voices[0];
                 if (maleVoice) utterance.voice = maleVoice;
 
                 window.speechSynthesis.speak(utterance);
@@ -578,14 +475,8 @@
                 const display = document.getElementById('spoken-text-display');
                 if (display) {
                     display.innerText = `"${textToSpeak}"`;
-                    display.classList.add('text-cyan-300', 'scale-105');
-                    setTimeout(() => display.classList.remove('text-cyan-300', 'scale-105'), 1500);
                 }
             }
-        }
-
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
         }
 
         // --- Screen Navigation & Mode Switching ---
@@ -602,6 +493,7 @@
         }
 
         function startCardInsertion() {
+            initAudioContext();
             speakNarrator("Please enter your ATM PIN.");
             showScreen('screen-pin');
         }
@@ -637,8 +529,9 @@
 
         function submitPin() {
             if (currentPin === correctPin) {
+                playLoginSound();
                 speakNarrator("Welcome killer");
-                appendReceipt("ATM AUTHENTICATION", "PIN Verified.\nUser: killer logged in.");
+                updateLiveAnswer("SUCCESS", "LOGIN: killer");
                 showScreen('screen-kiosk');
                 currentPin = "";
                 updatePinDots();
@@ -652,7 +545,6 @@
 
         function lockATM() {
             speakNarrator("ATM locked. Session ended.");
-            appendReceipt("SESSION LOCKED", "Card Ejected Safely.");
             showScreen('screen-welcome');
         }
 
@@ -685,7 +577,7 @@
             }
         }
 
-        // --- Unified Dial Pad Calculator Logic ---
+        // --- Dial Pad Calculator Logic ---
         let calcBuffer = "5 + 4";
         
         function calcInput(val) {
@@ -713,27 +605,14 @@
                 if (isNaN(result)) throw new Error("Invalid");
 
                 document.getElementById('calc-main-result').innerText = result;
-                
-                const box = document.getElementById('calc-display-box');
-                box.classList.add('border-emerald-400', 'scale-105', 'bg-emerald-950/40', 'shake-steroids');
-                setTimeout(() => box.classList.remove('border-emerald-400', 'scale-105', 'bg-emerald-950/40', 'shake-steroids'), 600);
-
-                const spokenText = `${calcBuffer.replace(/\+/g, ' plus ').replace(/-/g, ' minus ').replace(/\*/g, ' times ').replace(/\//g, ' divided by ')} is ${result}`;
-                speakNarrator(spokenText);
+                speakNarrator(`Answer is ${result}`);
 
                 const log = document.getElementById('kiosk-output-log');
                 log.innerHTML = `
-                    <div class="text-emerald-400 font-bold">Expression: ${calcBuffer}</div>
-                    <div class="text-slate-300 mt-1">Evaluated Answer: ${result}</div>
-                    <div class="text-cyan-400 text-[10px] mt-1">Bluetooth Speaker: "${spokenText}"</div>
+                    <div class="text-emerald-400 font-bold">${calcBuffer} = ${result}</div>
                 ` + log.innerHTML;
 
-                appendReceipt("DIAL PAD CALC", `${calcBuffer} = ${result}`);
-                
-                // AUTO PRINT: Automatically trigger thermal slip printing upon successful calculation
-                setTimeout(() => {
-                    window.print();
-                }, 400);
+                updateLiveAnswer(result, calcBuffer);
 
             } catch (err) {
                 speakNarrator("Calculation error.");
@@ -758,23 +637,43 @@
                 curLcm = lcm(curLcm, nums[i]);
             }
 
+            const ansText = `HCF: ${curHcf} | LCM: ${curLcm}`;
             const log = document.getElementById('kiosk-output-log');
-            log.innerHTML = `
-                <div class="text-gold font-bold">HCF & LCM: [${nums.join(', ')}]</div>
-                <div class="text-cyan-300">HCF = ${curHcf} | LCM = ${curLcm}</div>
-            ` + log.innerHTML;
+            log.innerHTML = `<div class="text-gold font-bold">${ansText}</div>` + log.innerHTML;
 
-            appendReceipt("HCF & LCM", `Numbers: ${nums.join(', ')}\nHCF: ${curHcf} | LCM: ${curLcm}`);
-            
-            speakNarrator(`The HCF is ${curHcf} and LCM is ${curLcm}`);
-
-            // AUTO PRINT
-            setTimeout(() => {
-                window.print();
-            }, 400);
+            updateLiveAnswer(`H:${curHcf} L:${curLcm}`, `Nums: ${inputStr}`);
+            speakNarrator(`HCF is ${curHcf} and LCM is ${curLcm}`);
         }
 
-        // --- Algebra Solver Presets & Logic ---
+        // --- 15 Pre-Made Algebra Equations List ---
+        const algebraPresets = [
+            { a: 1, b: 2, c: 10, label: "x + 2 = 10" },
+            { a: 2, b: 4, c: 12, label: "2x + 4 = 12" },
+            { a: 3, b: 5, c: 20, label: "3x + 5 = 20" },
+            { a: 4, b: -8, c: 16, label: "4x - 8 = 16" },
+            { a: 5, b: 10, c: 35, label: "5x + 10 = 35" },
+            { a: 6, b: -3, c: 15, label: "6x - 3 = 15" },
+            { a: 7, b: 14, c: 42, label: "7x + 14 = 42" },
+            { a: 8, b: 4, c: 36, label: "8x + 4 = 36" },
+            { a: 9, b: -9, c: 27, label: "9x - 9 = 27" },
+            { a: 10, b: 20, c: 70, label: "10x + 20 = 70" },
+            { a: 2, b: 1, c: 11, label: "2x + 1 = 11" },
+            { a: 3, b: -6, c: 12, label: "3x - 6 = 12" },
+            { a: 4, b: 12, c: 32, label: "4x + 12 = 32" },
+            { a: 5, b: -15, c: 10, label: "5x - 15 = 10" },
+            { a: 6, b: 18, c: 54, label: "6x + 18 = 54" }
+        ];
+
+        function renderAlgebraPresets() {
+            const container = document.getElementById('algebra-preset-list');
+            if (!container) return;
+            container.innerHTML = algebraPresets.map((p, idx) => `
+                <button onclick="setAlgebraPreset(${p.a}, ${p.b}, ${p.c})" class="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-mono text-white transition text-center truncate" title="${p.label}">
+                    ${p.label}
+                </button>
+            `).join('');
+        }
+
         function setAlgebraPreset(a, b, c) {
             document.getElementById('alg-a').value = a;
             document.getElementById('alg-b').value = b;
@@ -789,85 +688,28 @@
 
             if (a === 0) return;
             const x = (c - b) / a;
+            const ansText = `x = ${x.toFixed(2)}`;
 
             const log = document.getElementById('kiosk-output-log');
-            log.innerHTML = `
-                <div class="text-emerald-400 font-bold">Equation: ${a}x + ${b} = ${c}</div>
-                <div class="text-gold">Solution: x = ${x.toFixed(2)}</div>
-            ` + log.innerHTML;
+            log.innerHTML = `<div class="text-emerald-400 font-bold">${a}x + ${b} = ${c} => ${ansText}</div>` + log.innerHTML;
 
-            appendReceipt("ALGEBRA", `Eq: ${a}x + ${b} = ${c}\nx = ${x.toFixed(2)}`);
-            
-            speakNarrator(`For equation ${a}x plus ${b} equals ${c}, x equals ${x.toFixed(2)}`);
-
-            // AUTO PRINT
-            setTimeout(() => {
-                window.print();
-            }, 400);
+            updateLiveAnswer(ansText, `${a}x + ${b} = ${c}`);
+            speakNarrator(`x equals ${x.toFixed(2)}`);
         }
 
-        // --- Thermal Receipt & Print Management (Strictly Prints ONLY the receipt slip) ---
-        let latestReceiptText = "ATM MATH KIOSK\nUser: killer\nNo calculations yet.";
-
-        function appendReceipt(title, details) {
-            const body = document.getElementById('receipt-body');
-            if (body.querySelector('.italic')) {
-                body.innerHTML = '';
-            }
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-            const item = document.createElement('div');
-            item.className = 'border-b border-dashed border-slate-300 pb-2 mb-2';
-            item.innerHTML = `
-                <div class="font-bold text-black flex justify-between"><span>${title}</span><span>${timeStr}</span></div>
-                <div class="text-slate-700 whitespace-pre-line mt-1">${details}</div>
-            `;
-            body.prepend(item);
-            document.getElementById('receipt-timestamp').innerText = now.toLocaleDateString() + ' - ' + timeStr;
-
-            // Update plain text buffer for Easy Print app integration
-            latestReceiptText = `==============================\n       ATM MATH KIOSK       \n==============================\nUser: killer\nTime: ${now.toLocaleDateString()} ${timeStr}\n------------------------------\n[${title}]\n${details}\n------------------------------\n   EXHIBITION EDITION PROOF   \n==============================`;
+        // --- Live Answer Display Management ---
+        function updateLiveAnswer(ans, expr) {
+            document.getElementById('live-answer-box').innerText = ans;
+            document.getElementById('live-answer-meta').innerText = expr;
         }
 
-        function clearReceipt() {
-            document.getElementById('receipt-body').innerHTML = '<div class="text-slate-500 italic text-center py-6">Receipt cleared. Ready for next exhibition calculation.</div>';
-            latestReceiptText = "ATM MATH KIOSK\nUser: killer\nReceipt Cleared.";
-        }
-
-        function triggerPhysicalPrint() {
-            window.print();
-        }
-
-        // Easy Print App Bridge Functions
-        function openEasyPrintModal() {
-            document.getElementById('easyprint-text-area').value = latestReceiptText;
-            document.getElementById('modal-easyprint').classList.remove('hidden');
-        }
-
-        function closeEasyPrintModal() {
-            document.getElementById('modal-easyprint').classList.add('hidden');
-        }
-
-        function copyEasyPrintText() {
-            const textarea = document.getElementById('easyprint-text-area');
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                speakNarrator("Receipt copied for Easy Print app");
-                alert("Receipt slip copied to clipboard! Open your Easy Print app and paste it.");
-            } catch (err) {
-                alert("Failed to copy automatically. Please select text manually.");
-            }
-        }
-
-        function toggleHardwareModal(show) {
-            const modal = document.getElementById('modal-hardware');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
+        function clearAnswerBox() {
+            document.getElementById('live-answer-box').innerText = "-";
+            document.getElementById('live-answer-meta').innerText = "Cleared";
         }
 
         window.onload = function() {
+            renderAlgebraPresets();
             calcBuffer = "5 + 4";
             document.getElementById('calc-expr-preview').innerText = calcBuffer;
             document.getElementById('calc-main-result').innerText = "9";
